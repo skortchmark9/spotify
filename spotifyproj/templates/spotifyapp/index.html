@@ -66,7 +66,7 @@ var templateSource = document.getElementById('results-template').innerHTML,
 var fetchTracks = function (albumId, callback) {
     $.ajax({
         url: 'https://api.spotify.com/v1/albums/' + albumId,
-        success: function (response) {    
+        success: function (response) {
         	console.log("success!");
             callback(response);
         }
@@ -74,21 +74,33 @@ var fetchTracks = function (albumId, callback) {
 };
 
 var searchAlbums = function (query) {
+    query = query.slice(0, 2);
     query = query.join(' ');
+    var type = 'track';
     console.log(query);
     $.ajax({
         url: 'https://api.spotify.com/v1/search',
         data: {
             q: query,
-            type: 'album'
+            type: type
         },
         success: function (response) {
-        	// console.log(response["tracks"]["items"][0]['id']);
-            resultsPlaceholder.innerHTML = template(response);
-			fetchTracks(response["albums"]["items"][0]['id'], function (data) {
-				audioObject = new Audio(data.tracks.items[0].preview_url);
+            console.log(response);
+            if (type == 'track' && response['tracks']['items'].length) {
+                audioObject = new Audio(response.tracks.items[0].preview_url);
                 audioObject.play();
-            });
+            }
+
+            if (type == 'album' && response['albums']['items'].length) {
+                resultsPlaceholder.innerHTML = template(response);
+                fetchTracks(response["albums"]["items"][0]['id'], function (data) {
+                    if (audioObject) {
+                        audioObject.pause();
+                    }
+                    audioObject = new Audio(data.tracks.items[0].preview_url);
+                    audioObject.play();
+                });
+            }
         }
     });
 };
