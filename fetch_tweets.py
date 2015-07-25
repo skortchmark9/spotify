@@ -4,6 +4,10 @@ import urllib2 as urllib
 import json
 import sys
 import csv
+from collections import Counter
+import time
+import memcache
+
 
 # See Assignment 1 instructions for how to get these credentials
 access_token_key = "3071366253-WJMCcY10iQttEkp5k7NschIyDkutZMnMfkdCC8R"
@@ -81,22 +85,55 @@ def fetch_by_user_names(user_name_file):
         for tweet in response:
             writer.writerow((user, tweet['text'].encode('utf-8')))
 
-
+def parse(word):
+    return word.lower().split("'")[0]
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-c', required=True, help='Enter the command')
-    parser.add_argument('-term', help='Enter the search term')
-    parser.add_argument('-file', help='Enter the user name file')
-    opts = parser.parse_args()
-    if opts.c == "fetch_samples":
-        fetch_samples()
-    elif opts.c == "fetch_by_terms":
-        term = opts.term
-        fetch_by_terms(term)
-    elif opts.c == "fetch_by_user_names":
-        user_name_file = opts.file
-        fetch_by_user_names(user_name_file)
-    else:
-        raise Exception("Unrecognized command")
+    stop_words = [w.strip() for w in open('stop_words.txt')]
+
+    url = "https://stream.twitter.com/1.1/statuses/sample.json?language=en"
+    parameters = []
+    response = twitterreq(url, "GET", parameters)
+    #tweets = []
+    mc = memcache.Client(['127.0.0.1:11211'], debug=0)
+
+    words  = Counter()
+
+    t = time.time()
+    for line in response:
+
+
+        tweet    = json.loads(line.strip())["text"].strip("RT ")
+        #badwords = filter(lambda s: s.startswith('@') or s.startswith('#') or s.startswith('http'), tweet.split()) # for  parse(word) not in badwords
+
+        words.update([word for word in tweet.split() if parse(word) not in stop_words and not any([c in word for c in {"-","&","+","'","/","|",'#',"@","http",".",",","$","!","*","."}])]) # parse(word)
+
+        all_words = sum(words.values())
+        #for word, freq in words.most_common()[:10]:
+        #    print('{0} {1}'.format(word.encode('utf-8'), float(freq) / all_words))
+        
+        if time.time() > t + 10:#int(time.time())%30 == 0:
+            lst = [w[0] for w in words.most_common()[:10]]
+            print lst
+            mc.set('tags',lst)
+            words = Counter()
+            t = time.time()
+
+
+    
+        #print '\n\n\n'
+
+
+
+
+        """
+        tags = [d["text"] for d in json.loads(line.strip())["entities"]["hashtags"]]
+        print tags
+        """
+
+        #tweets.append(line.strip())
+        
+
+
+
