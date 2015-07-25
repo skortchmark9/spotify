@@ -107,12 +107,12 @@ if __name__ == '__main__':
         tweet    = json.loads(line.strip())["text"].strip("RT ")
         #badwords = filter(lambda s: s.startswith('@') or s.startswith('#') or s.startswith('http'), tweet.split()) # for  parse(word) not in badwords
 
-        words.update([word for word in tweet.split() if parse(word) not in stop_words and not any([c in word for c in {"-","&","+","'","/","|",'#',"@","http",".",",","$","!","*","."}])]) # parse(word)
+        words.update([word for word in tweet.split() if parse(word) not in stop_words and not any([c in word for c in {"-","&","+","'","/","|",'#',"@","http",".",",","$","!","*",".","?"}])]) # parse(word)
 
         all_words = sum(words.values())
         #for word, freq in words.most_common()[:10]:
         #    print('{0} {1}'.format(word.encode('utf-8'), float(freq) / all_words))
-        
+
         if time.time() > t + 10:#int(time.time())%30 == 0:
             lst = [w[0] for w in words.most_common()[:10]]
             print lst
@@ -121,7 +121,7 @@ if __name__ == '__main__':
             t = time.time()
 
 
-    
+
         #print '\n\n\n'
 
 
@@ -133,7 +133,7 @@ if __name__ == '__main__':
         """
 
         #tweets.append(line.strip())
-        
+
 
 
 

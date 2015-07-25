@@ -17,7 +17,6 @@ def get_tags(request):
         songs = [{'title': song['title'], 'artist': song['artist'], 'context':song['context']} for song in songs]
 
     jake = {'songs': songs, 'tags': tags}
-
     return JsonResponse(jake, safe=False)
 
 
