@@ -358,3 +358,6 @@ justin
 bieber
 direction
 one
+lady
+tweet
+retweet

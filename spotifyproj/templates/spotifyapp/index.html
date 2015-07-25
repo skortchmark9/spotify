@@ -39,6 +39,13 @@
 		</center>
 	</div>
 	</div>
+    <div id="song-title">
+
+    </div>
+
+    <div id="song-lyrics">
+
+    </div>
 
 	</body>
 </html>
@@ -73,8 +80,23 @@ var fetchTracks = function (albumId, callback) {
     });
 };
 
+var searchByLyrics = function( query) {
+    var url = 'http://api.lyricsnmusic.com/songs?api_key=efee5f39bd2b6902960d1a8d44542f';
+    query = query.join(' ');
+    $.ajax({
+        url: url,
+        data: {
+            lyrics: query,
+        },
+        success: function(response) {
+            console.log(response);
+        }
+    })
+}
+
 var searchAlbums = function (query) {
-    query = query.slice(0, 2);
+    query = query.slice(0, 10);
+
     query = query.join(' ');
     var type = 'track';
     console.log(query);
@@ -87,6 +109,9 @@ var searchAlbums = function (query) {
         success: function (response) {
             console.log(response);
             if (type == 'track' && response['tracks']['items'].length) {
+                if (audioObject) {
+                    audioObject.pause();
+                }
                 audioObject = new Audio(response.tracks.items[0].preview_url);
                 audioObject.play();
             }
@@ -109,39 +134,41 @@ function getTags() {
     $.ajax({
         url: '/api',
         success: function (response) {
-            var tags = response;
-            searchAlbums(tags);
+            var tags = response.tags;
+            var songs = response.songs;
+            console.log(tags, songs);
+            if (songs && songs.length) {
+                getSongByArtistAndTitle(songs[0]);
+            }
             setTimeout(getTags, 10000);
         }
     });
 }
 
-// results.addEventListener('click', function (e) {
-//     var target = e.target;
-//     console.log(target);
-//     if (target !== null && target.classList.contains('cover')) {
-//         if (target.classList.contains(playingCssClass)) {
-//             audioObject.pause();
-//         } else {
-//             if (audioObject) {
-//                 audioObject.pause();
-//             }
-//             fetchTracks(target.getAttribute('data-album-id'), function (data) {
-//             	console.log("data:");
-//             	console.log(data.tracks.items[0]);
-//                 audioObject = new Audio(data.tracks.items[0].preview_url);
-//                 audioObject.play();
-//                 target.classList.add(playingCssClass);
-//                 audioObject.addEventListener('ended', function () {
-//                     target.classList.remove(playingCssClass);
-//                 });
-//                 audioObject.addEventListener('pause', function () {
-//                     target.classList.remove(playingCssClass);
-//                 });
-//             });
-//         }
-//     }
-// });
+function getSongByArtistAndTitle(song) {
+    if (!song) {
+        return;
+    }
+    console.log(song);
+    var baseurl = 'https://api.spotify.com/v1/search';
+    var query = '?q=' + song.title + '%20artist:' + song.artist.name + '&type=track';
+    $.ajax({
+        url: baseurl + query,
+        success: function (response) {
+            console.log(response);
+            if (response.tracks.items && response.tracks.items.length) {
+                if (audioObject) {
+                    audioObject.pause();
+                }
+                audioObject = new Audio(response.tracks.items[0].preview_url);
+                audioObject.play();
+                document.getElementById('song-title').innerHTML = song.title + song.artist.name;
+                document.getElementById('song-lyrics').innerHTML = song.context;
+            }
+        }
+    });
+}
+
 
 $(document).ready(function() {
     getTags();
