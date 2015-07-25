@@ -1,0 +1,66 @@
+.modal-large {
+	width: 130%; /* desired relative width */
+  left: -15%; /* (100%-width)/2 */
+  /* place center */
+  margin-left:auto;
+  margin-right:auto;
+}
+/* 
+Index page
+*/
+.itinerary-addon {
+	min-width: 9em;
+	text-align: left;
+	/*background-color: #DAF0F2;*/
+	background-color: white;
+	cursor: pointer;
+}
+
+.loc-addon {
+	color: black;
+}
+
+#delete {
+	/*max-width: 2em;*/
+	cursor: pointer;
+}
+#delete:hover {
+	color: black;
+}
+
+/* Contact page */
+.control-label {
+	font-family: 'Roboto', 'Arial';
+	font-weight: 400;
+	font-size: 15px;
+}
+
+.carousel-control {
+	font-size: 4em;
+}
+
+.carousel-control .fa {
+	margin-top: 1.4em;
+	color: #f96a59;
+}
+
+/* Banner */
+.banner-main {
+  padding: 1.5em 18em 0em 18em;
+  /*height: 230px;*/
+  /*background-image: url("../img/cherry-blossom.jpg");*/
+  background-color: white;
+  color: black;
+}
+
+.banner-main h1 {
+	font-size: 3em;
+}
+
+.banner-main h2 {
+	font-size: 2.6em;
+}
+
+.banner-main p {
+	font-size: 1.7em;
+}

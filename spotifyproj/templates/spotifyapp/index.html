@@ -1,1 +1,105 @@
-SPOTIFY APP
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+        <meta charset="utf-8">
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap-fluid-adj.css' %}" rel="stylesheet">
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/slider.css' %}" rel="stylesheet" media="screen">
+
+        <!-- CSS -->
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <link href="{% static 'css/hover.css' %}" rel="stylesheet" media="all">
+
+        <!--Javascript-->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+        <script src="{% static 'js/bootstrap-slider.js' %}"></script>
+
+        <!-- Google Fonts -->
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,700|Oxygen:400,700|Montserrat' rel='stylesheet' type='text/css'>
+
+        <title>{% block title %}Spotify{% endblock %}</title>
+    </head>
+
+    <body>
+
+	<div class="container">
+    <h1>Search for an Artist</h1>
+    <p>Type an artist name and click on "Search". Then, click on any album from the results to play 30 seconds of its first track.</p>
+    <form id="search-form">
+        <input type="text" id="query" value="" class="form-control" placeholder="Type an Artist Name"/>
+        <input type="submit" id="search" class="btn btn-primary" value="Search" />
+    </form>
+    <div id="results"></div>
+	</div>
+</body>
+</html>
+<script id="results-template" type="text/x-handlebars-template">
+    {{#each albums.items}}
+    <div style="background-image:url({{images.0.url}})" data-album-id="{{id}}" class="cover"></div>
+    {{/each}}
+</script>
+
+<script type="text/javascript">
+// find template and compile it
+var templateSource = document.getElementById('results-template').innerHTML,
+    template = Handlebars.compile(templateSource),
+    resultsPlaceholder = document.getElementById('results'),
+    playingCssClass = 'playing',
+    audioObject = null;
+
+var fetchTracks = function (albumId, callback) {
+    $.ajax({
+        url: 'https://api.spotify.com/v1/albums/' + albumId,
+        success: function (response) {
+            callback(response);
+        }
+    });
+};
+
+var searchAlbums = function (query) {
+    $.ajax({
+        url: 'https://api.spotify.com/v1/search',
+        data: {
+            q: query,
+            type: 'album'
+        },
+        success: function (response) {
+            resultsPlaceholder.innerHTML = template(response);
+        }
+    });
+};
+
+results.addEventListener('click', function (e) {
+    var target = e.target;
+    if (target !== null && target.classList.contains('cover')) {
+        if (target.classList.contains(playingCssClass)) {
+            audioObject.pause();
+        } else {
+            if (audioObject) {
+                audioObject.pause();
+            }
+            fetchTracks(target.getAttribute('data-album-id'), function (data) {
+                audioObject = new Audio(data.tracks.items[0].preview_url);
+                audioObject.play();
+                target.classList.add(playingCssClass);
+                audioObject.addEventListener('ended', function () {
+                    target.classList.remove(playingCssClass);
+                });
+                audioObject.addEventListener('pause', function () {
+                    target.classList.remove(playingCssClass);
+                });
+            });
+        }
+    }
+});
+
+document.getElementById('search-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    searchAlbums(document.getElementById('query').value);
+}, false);
+</script>

@@ -1,0 +1,225 @@
+.main-alternative, .hover-alternative {
+	width: 100px;
+	border-top: 3px solid #f96a59;
+}
+
+.normal-alternative {
+	width: 100px;
+	border-top: 3px solid #F5F5F5;
+}
+
+img.activity:hover {
+/*	opacity: .8;
+    -webkit-transition:all .4s;
+    -moz-transition:all .4s;
+    -ms-transition:all .4s;
+    -o-transition:all .4s;
+    transition:all .4s;*/
+	/*border-top: 4px solid #f96a59;*/
+}
+
+hr#popover {
+	margin-top: 0.4em;
+	margin-bottom: 0.4em;
+}
+
+span.normal-font { 
+	font-size: 13.8px; 
+}
+
+
+span#title-main {
+	font-size: 1.25em;
+}
+
+span#title-alt {
+	font-size: 1em;
+}
+
+.desc-activity {
+	margin-left: 2.5em;
+}
+
+.title-activity {
+	margin-left: 1em;
+	background-color: #F5F5F5;
+	padding: 8px 10px 8px 10px;
+}
+
+.title-location {
+	font-size: .8em;
+	font-family: 'Roboto', 'Arial';
+	font-weight: normal;
+	top: 3px;
+	position: relative;
+}
+
+ /* Carousel */
+.carousel-control .fa-angle-left {
+	margin-right: .8em;
+}
+.carousel-control .fa-angle-right {
+	margin-left: .8em;
+}
+
+.carousel-arrow {
+	/*font-size: 1.3em;*/
+	font-size: 2em;
+	color: #f96a59;
+}
+
+.carousel-indicators { /* little dots at bottom */
+	margin-bottom: -3.4em;
+}
+.carousel-indicators li {
+  	/*background-color: #999;*/
+	background-color: rgba(70,70,70,.25);
+}
+.carousel-indicators .active {
+  	background-color: #444;
+}
+
+.carousel-control {
+	position: absolute;
+	top: 20%;
+	display: inline-block;
+}
+
+/* Google Maps */
+#directions-panel {
+/*	border-width: .175em;
+	border-style: solid;
+	border-color: #DF3131;*/
+	background-color: white;
+	font-family: 'Roboto', 'Arial';
+	/*height: 13em;*/
+	width: 22.8em;
+	overflow-y: auto;
+}
+
+#directions-link {
+	margin-left: 9.8em;
+	/*font-family: 'Roboto', 'Arial';*/
+}
+
+#map-canvas {
+	height: 20em;
+	width: 22.8em;
+/*  height: 50%;
+  width: 100%;*/
+}
+
+#direction-error {
+	width: 22.8em;
+}
+
+.map {
+	margin-top: -16px;
+}
+
+.map.affix-top {
+	position: static;
+	/*bottom: 1000px;*/
+}
+
+.map.affix {
+	position: fixed;
+	margin-left: 733.2px;
+	margin-top: -90px; /* -4px */
+}
+
+/* Page spinner/loader */
+.loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url('../img/page-loader.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+
+/* Share itinerary modal */
+.share-itinerary {
+	padding: 1em 1em 1em 1em;
+	background-color: #F5F5F5;
+	width: auto;
+}
+
+.btn-update {
+	float: right;
+}
+
+#itinerary-header {
+	z-index: 1030;
+	/*position: absolute;*/
+	background-color: white;
+	padding-bottom: .75em;
+	border-bottom: solid .1em #F5F5F5;
+}
+
+#itinerary-header.affix-top {
+	position: static;
+}
+
+#itinerary-header.affix {
+	position: fixed;
+	margin-top: -74px;
+}
+
+#itinerary-header-wrapper {
+	height: 86px;
+}
+
+#itinerary-content {
+	padding-top: 1em;
+}
+
+.pac-container { /* google autocomplete */
+    z-index: 1060 !important;
+}
+
+.modal-dialog {
+	z-index: 1050;
+}
+
+.modal-backdrop {
+	z-index: 1040;
+}
+
+.title-activity {
+	font: 'Oxygen', 'Arial';
+	font-weight: normal;
+}
+
+.handle .fa-angle-double-down, .handle .fa-angle-double-right {
+	font-size: 20px;
+	color: black;
+	cursor: pointer;
+}
+
+.alternatives-section .fa-angle-double-down, .alternatives-section .fa-angle-double-right {
+	font-size: 14px;
+}
+
+.handle {
+	cursor: move;
+}
+
+#new-activity-adder .title-activity:hover {
+	background-color: Gainsboro;
+	cursor: pointer;
+}
+
+#new-activity-container .popover {
+  width: 20em;
+  max-width: none;
+}
+
+/* 3 buttons on the same line */
+#outer-btn-wrapper {
+    width:100%;
+}
+.inner-btn-wrapper {
+    display: inline-block;
+}
