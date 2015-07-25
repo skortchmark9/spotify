@@ -42,8 +42,9 @@
 <script id="results-template" type="text/x-handlebars-template">
 	{% verbatim %}
 	    {{#each albums.items}}
-
+	{% endverbatim %}
     <div style="background-image:url({{images.0.url}})" data-album-id="{{id}}" class="cover"></div>
+    {% verbatim %}
     {{/each}}
 	{% endverbatim %}
 </script>
@@ -51,7 +52,7 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
 
 <script type="text/javascript">
-// find template and compile it
+// find template and compile items
 var templateSource = document.getElementById('results-template').innerHTML,
     template = Handlebars.compile(templateSource),
     resultsPlaceholder = document.getElementById('results'),
@@ -59,6 +60,7 @@ var templateSource = document.getElementById('results-template').innerHTML,
     audioObject = null;
 
 var fetchTracks = function (albumId, callback) {
+	console.log("fetchTracks");
     $.ajax({
         url: 'https://api.spotify.com/v1/albums/' + albumId,
         success: function (response) {
@@ -75,6 +77,7 @@ var searchAlbums = function (query) {
             type: 'album'
         },
         success: function (response) {
+        	console.log(response);
             resultsPlaceholder.innerHTML = template(response);
         }
     });
