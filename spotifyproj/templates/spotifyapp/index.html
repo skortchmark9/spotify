@@ -41,11 +41,11 @@
 
 <script id="results-template" type="text/x-handlebars-template">
 	{% verbatim %}
-	{{#each albums.items}}
+    {{#with albums.items.[0]}}
 	{% endverbatim %}
     <div style="background-image: url({% verbatim %}{{images.0.url}}{% endverbatim %})" data-album-id="{% verbatim %}{{id}}{% endverbatim %}" class="cover"></div>
     {% verbatim %}
-    {{/each}}
+    {{/with}}
 	{% endverbatim %}
 </script>
 
