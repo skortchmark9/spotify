@@ -30,11 +30,6 @@
 	<div class="col-md-8 col-md-offset-2">
 		<center>
 	    <h1>Twitterfy</h1>
-	    <p></p>
-	    <form id="search-form">
-	        <input type="text" id="query" value="" class="form-control" placeholder="Type an Artist Name"/>
-	        <input type="submit" id="search" class="btn btn-primary" value="Search" />
-	    </form>
 	    <div id="results"></div>
 		</center>
 	</div>
@@ -44,13 +39,13 @@
 </html>
 
 <script id="results-template" type="text/x-handlebars-template">
-	{% verbatim %}
-    {{#with albums.items.[0]}}
-	{% endverbatim %}
-    <div style="background-image: url({% verbatim %}{{images.0.url}}{% endverbatim %})" data-album-id="{% verbatim %}{{id}}{% endverbatim %}" class="cover"></div>
-    {% verbatim %}
-    {{/with}}
-	{% endverbatim %}
+	// {% verbatim %}
+ //    {{#each songAlbums}}
+	// {% endverbatim %}
+ //    <div style="background-image: url({% verbatim %}{{ previewUrl }}{% endverbatim %})" class="cover"></div>
+ //    {% verbatim %}
+ //    {{/each}}
+	// {% endverbatim %}
 </script>
 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
@@ -75,8 +70,12 @@ var fetchTracks = function (albumId, callback) {
 
 var searchAlbums = function (query) {
     query = query.slice(0, 2);
+    for (var i = 0; i < query.length; i++) {
+    	query[i] = capitalizeFirstLetter(query[i]);
+    }
     query = query.join(' ');
     var type = 'track';
+    var songObj, albumTitle, trackTitle, previewUrl, artist, query;
     console.log(query);
     $.ajax({
         url: 'https://api.spotify.com/v1/search',
@@ -86,13 +85,16 @@ var searchAlbums = function (query) {
         },
         success: function (response) {
             console.log(response);
+            /*
+            Query words, album title, track title
+            */
             if (type == 'track' && response['tracks']['items'].length) {
                 audioObject = new Audio(response.tracks.items[0].preview_url);
                 audioObject.play();
+                songObj = response['tracks']['items'][0];
             }
 
-            if (type == 'album' && response['albums']['items'].length) {
-                resultsPlaceholder.innerHTML = template(response);
+            else if (type == 'album' && response['albums']['items'].length) {
                 fetchTracks(response["albums"]["items"][0]['id'], function (data) {
                     if (audioObject) {
                         audioObject.pause();
@@ -100,10 +102,28 @@ var searchAlbums = function (query) {
                     audioObject = new Audio(data.tracks.items[0].preview_url);
                     audioObject.play();
                 });
+                songObj = response['albums']['items'][0];
             }
+
+            albumTitle = songObj['album']['name'];
+            trackTitle = songObj['name'];
+            previewUrl = songObj['album']['images'][0]['url'];
+            artist = "";
+            for (var a in songObj['artists']) {
+            	artist += songObj['artists'][a]['name'] + ", ";
+            }
+            artist = artist.slice(0, artist.length - 2);
+            // resultsPlaceholder.innerHTML = template(songInfo);
+            console.log(previewUrl);
+            resultsPlaceholder.innerHTML = "<p>Search Terms: " + query + "</p><p>Artist: " + artist + "</p><p>Album: " + albumTitle + "</p><p>Track: " + trackTitle + 
+            "</p><p>" + "<div style='background-image: url(" + previewUrl + ")' class='cover'></div></p>";
         }
     });
 };
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 function getTags() {
     $.ajax({

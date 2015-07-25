@@ -10,5 +10,5 @@ def index(request):
 def get_tags(request):
     mc = memcache.Client(['127.0.0.1:11211'], debug=0)
     key = 'tags'
-    jake = mc.get(key) or ['hats']
+    jake = mc.get(key) or ['taylor', 'swift']
     return JsonResponse(jake, safe=False)
