@@ -62,7 +62,8 @@ var templateSource = document.getElementById('results-template').innerHTML,
 var fetchTracks = function (albumId, callback) {
     $.ajax({
         url: 'https://api.spotify.com/v1/albums/' + albumId,
-        success: function (response) {
+        success: function (response) {    
+        	console.log("success!");
             callback(response);
         }
     });
@@ -70,13 +71,15 @@ var fetchTracks = function (albumId, callback) {
 
 var searchAlbums = function (query) {
     query = query.join(' ');
+    console.log(query);
     $.ajax({
         url: 'https://api.spotify.com/v1/search',
         data: {
             q: query,
-            type: 'track'
+            type: 'album'
         },
         success: function (response) {
+        	// console.log(response["tracks"]["items"][0]['id']);
             resultsPlaceholder.innerHTML = template(response);
 			fetchTracks(response["albums"]["items"][0]['id'], function (data) {
 				audioObject = new Audio(data.tracks.items[0].preview_url);
@@ -87,13 +90,12 @@ var searchAlbums = function (query) {
 };
 
 function getTags() {
-    console.log('get tags');
     $.ajax({
         url: '/api',
         success: function (response) {
             var tags = response;
             searchAlbums(tags);
-            setTimeout(getTags, 30000);
+            setTimeout(getTags, 10000);
         }
     });
 }

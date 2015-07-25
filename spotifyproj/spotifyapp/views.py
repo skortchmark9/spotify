@@ -6,5 +6,5 @@ def index(request):
 
 
 def get_tags(request):
-    jake = ['hats', 'cats', 'bats', 'rats']
+    jake = ['taylor', 'swift']
     return JsonResponse(jake, safe=False)
