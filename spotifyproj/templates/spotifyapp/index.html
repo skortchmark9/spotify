@@ -78,19 +78,21 @@ var searchAlbums = function (query) {
         success: function (response) {
             resultsPlaceholder.innerHTML = template(response);
 			fetchTracks(response["albums"]["items"][0]['id'], function (data) {
-                audioObject = new Audio(data.tracks.items[0].preview_url);
+				audioObject = new Audio(data.tracks.items[0].preview_url);
                 audioObject.play();
-                // target.classList.add(playingCssClass);
-                // audioObject.addEventListener('ended', function () {
-                //     target.classList.remove(playingCssClass);
-                // });
-                // audioObject.addEventListener('pause', function () {
-                //     target.classList.remove(playingCssClass);
-                // });
             });
         }
     });
 };
+
+getTags = function() {
+    $.ajax({
+        url: '/api',
+        success: function (response) {
+            console.log(response);
+        }
+    });
+}
 
 // results.addEventListener('click', function (e) {
 //     var target = e.target;
