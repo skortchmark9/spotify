@@ -1,7 +1,7 @@
-from django.conf.urls import url
+from django.conf.urls import patterns, url
+from spotifyapp import views
 
-from . import views
-
-urlpatterns = [
+urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-]
+    url(r'^api', views.get_tags)
+)
