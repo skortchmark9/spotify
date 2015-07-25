@@ -165,11 +165,11 @@ function getTags() {
         success: function (response) {
             var tags = response.tags;
             var songs = response.songs;
-            // searchAlbums(tags);
-            console.log(tags, songs);
-            if (songs && songs.length) {
-                getSongByArtistAndTitle(songs[0]);
-            }
+            searchAlbums(tags);
+            // console.log(tags, songs);
+            // if (songs && songs.length) {
+            //     getSongByArtistAndTitle(songs[0]);
+            // }
             setTimeout(getTags, 10000);
         }
     });
