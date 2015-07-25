@@ -1,5 +1,4 @@
-from django.http import HttpResponse
-
+from django.shortcuts import render
 
 def index(request):
-    return HttpResponse("Spotify App!")
+    return render(request, 'spotifyapp/index.html')
