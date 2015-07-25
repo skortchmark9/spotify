@@ -17,7 +17,6 @@
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
         <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-        <script src="{% static 'js/bootstrap-slider.js' %}"></script>
 
         <!-- Google Fonts -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans|Roboto:400,700|Oxygen:400,700|Montserrat' rel='stylesheet' type='text/css'>
@@ -36,13 +35,20 @@
     </form>
     <div id="results"></div>
 	</div>
-</body>
+
+
+	</body>
 </html>
 <script id="results-template" type="text/x-handlebars-template">
-    {{#each albums.items}}
+	{% verbatim %}
+	    {{#each albums.items}}
+
     <div style="background-image:url({{images.0.url}})" data-album-id="{{id}}" class="cover"></div>
     {{/each}}
+	{% endverbatim %}
 </script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
 
 <script type="text/javascript">
 // find template and compile it
