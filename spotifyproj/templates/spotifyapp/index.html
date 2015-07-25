@@ -83,6 +83,15 @@ var searchAlbums = function (query) {
     });
 };
 
+getTags = function() {
+    $.ajax({
+        url: '/api',
+        success: function (response) {
+            console.log(response);
+        }
+    });
+}
+
 results.addEventListener('click', function (e) {
     var target = e.target;
     if (target !== null && target.classList.contains('cover')) {
