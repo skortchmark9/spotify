@@ -69,11 +69,12 @@ var fetchTracks = function (albumId, callback) {
 };
 
 var searchAlbums = function (query) {
+    query = query.join(' ');
     $.ajax({
         url: 'https://api.spotify.com/v1/search',
         data: {
             q: query,
-            type: 'album'
+            type: 'track'
         },
         success: function (response) {
             resultsPlaceholder.innerHTML = template(response);
@@ -85,11 +86,14 @@ var searchAlbums = function (query) {
     });
 };
 
-getTags = function() {
+function getTags() {
+    console.log('get tags');
     $.ajax({
         url: '/api',
         success: function (response) {
-            console.log(response);
+            var tags = response;
+            searchAlbums(tags);
+            setTimeout(getTags, 30000);
         }
     });
 }
@@ -121,8 +125,7 @@ getTags = function() {
 //     }
 // });
 
-document.getElementById('search-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    searchAlbums(document.getElementById('query').value);
-}, false);
+$(document).ready(function() {
+    getTags();
+})
 </script>
